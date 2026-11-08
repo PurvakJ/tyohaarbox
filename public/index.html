@@ -1,43 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#6e1226" />
+
+    <!-- Icons -->
     <link rel="icon" href="https://res.cloudinary.com/dm9gg8yss/image/upload/v1794127182/image/f02cc1b8-c048-47bf-91f3-932a77b787da_noufnx.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dm9gg8yss/image/upload/v1794127182/image/f02cc1b8-c048-47bf-91f3-932a77b787da_noufnx.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- SEO -->
+    <title>Tyohaar Box | Curated Gift Hampers for Every Occasion</title>
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Tyohaar Box offers premium, handpacked gift hampers for Diwali, Rakhi, Lohri, weddings, birthdays and corporate gifting. Customisable, with delivery available. Order on WhatsApp."
     />
-    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dm9gg8yss/image/upload/v1794127182/image/f02cc1b8-c048-47bf-91f3-932a77b787da_noufnx.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <meta
+      name="keywords"
+      content="gift hampers, Diwali hampers, Rakhi gifts, Lohri gifts, corporate gifting, festive hampers, customised gifts, Tyohaar Box"
+    />
+    <meta name="author" content="Tyohaar Box" />
+    <meta name="robots" content="index, follow" />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>TyohaarBox</title>
+    <!-- Open Graph / WhatsApp / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Tyohaar Box" />
+    <meta property="og:title" content="Tyohaar Box | Curated Gifts. Timeless Memories." />
+    <meta
+      property="og:description"
+      content="Premium festive, personal and corporate gift hampers, handpacked with love. Order on WhatsApp."
+    />
+    <meta property="og:image" content="https://res.cloudinary.com/dm9gg8yss/image/upload/v1794127182/image/f02cc1b8-c048-47bf-91f3-932a77b787da_noufnx.png" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Tyohaar Box | Curated Gifts. Timeless Memories." />
+    <meta
+      name="twitter:description"
+      content="Premium festive, personal and corporate gift hampers, handpacked with love."
+    />
+    <meta name="twitter:image" content="https://res.cloudinary.com/dm9gg8yss/image/upload/v1794127182/image/f02cc1b8-c048-47bf-91f3-932a77b787da_noufnx.png" />
+
+    <!-- Faster loading of third-party resources the app uses -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+    <link rel="dns-prefetch" href="https://script.google.com" />
+    <link rel="dns-prefetch" href="https://api.cloudinary.com" />
+
+    <!-- Fonts (Playfair Display is used for headings and the hamper label art).
+         If your App.css already imports these fonts, you can delete this line. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Structured data for Google -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Tyohaar Box",
+        "description": "Curated premium gift hampers for festive, personal and corporate gifting.",
+        "slogan": "Curated Gifts. Timeless Memories.",
+        "image": "https://res.cloudinary.com/dm9gg8yss/image/upload/v1794127182/image/f02cc1b8-c048-47bf-91f3-932a77b787da_noufnx.png",
+        "telephone": ["+91 94179 08933", "+91 76966 81584"],
+        "areaServed": "IN",
+        "sameAs": ["https://www.instagram.com/tyohaarbox.in/"]
+      }
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>You need to enable JavaScript to view Tyohaar Box.</noscript>
     <div id="root"></div>
     <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
+      The build step injects the bundled scripts into <body>.
+      Run `npm start` to develop and `npm run build` to create a production bundle.
     -->
   </body>
 </html>
