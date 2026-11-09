@@ -213,6 +213,8 @@ function Icon({ k }) {
       {k === 'star' && <path {...p} d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z" />}
       {k === 'heart' && <path {...p} d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z" />}
       {k === 'sparkle' && <path {...p} d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z" />}
+      {k === 'gift' && <path {...p} d="M3 10h18v4H3zM5 14h14v7H5zM12 10v11M12 10c-4-1-6-6-3-6 2 0 3 3 3 6zM12 10c4-1 6-6 3-6-2 0-3 3-3 6z" />}
+      {k === 'chat' && <path {...p} d="M4 5h16v11H9l-5 4z" />}
       {k === 'truck' && (
         <g {...p}>
           <path d="M2 6h11v10H2zM13 9.5h4l3.5 3.5V16H13z" />
@@ -486,9 +488,10 @@ function EmptyArt({ text }) {
   );
 }
 
-function PageHead({ title, sub }) {
+function PageHead({ title, sub, bg }) {
   return (
     <header className="page-head">
+      <BgPhoto url={bg} />
       <div className="garland top" aria-hidden="true" />
       <Lantern className="l1" color="#f08a24" />
       <Lantern className="l3" color="#c0392b" />
@@ -516,6 +519,263 @@ function SecIntro({ eyebrow, title, sub }) {
         {sub && <p>{sub}</p>}
       </div>
     </Reveal>
+  );
+}
+
+/* ───────────── PHOTOS: paste your own image links (Cloudinary or /public). '' = show illustration ───────────── */
+const PHOTOS = {
+  hero: '',      // faint background behind the home hero
+  packing: '',   // hampers being packed
+  festive: '',   // festive lights / diyas
+  corporate: '', // corporate gift boxes
+  delivery: '',  // delivery / courier
+  gifting: '',   // hamper on a table
+};
+
+// True only after the image has really loaded, so a bad link never shows a broken image
+function useLoaded(url) {
+  const [ok, setOk] = useState(false);
+  useEffect(() => {
+    if (!url) { setOk(false); return undefined; }
+    let live = true;
+    const im = new Image();
+    im.onload = () => live && setOk(true);
+    im.onerror = () => live && setOk(false);
+    im.src = url;
+    return () => { live = false; };
+  }, [url]);
+  return ok;
+}
+
+function BgPhoto({ url }) {
+  const ok = useLoaded(url);
+  return ok ? <div className="bg-photo" style={{ backgroundImage: `url(${optimise(url, 1800)})` }} aria-hidden="true" /> : null;
+}
+
+/* ───────────── occasion illustrations ───────────── */
+const OCC = [
+  ['diwali', 'Diwali', '#4a0a18'], ['rakhi', 'Rakhi', '#b3315a'], ['lohri', 'Lohri', '#7a2a10'], ['karwa', 'Karwa Chauth', '#2a1a4a'],
+  ['wedding', 'Weddings', '#8a1c33'], ['birthday', 'Birthdays', '#e4577a'], ['anniversary', 'Anniversaries', '#6e1226'], ['baby', 'Baby Showers', '#2fa9b0'],
+  ['corporate', 'Corporate Gifting', '#33060f'], ['christmas', 'Christmas', '#1d5a3a'], ['newyear', 'New Year', '#1a1440'], ['thanks', 'Thank You Gifts', '#e07a1c'],
+];
+
+function OccasionArt({ k, bg }) {
+  const ring = (n, r, f) => Array.from({ length: n }, (_, i) => (i * 360) / n).map((a) => (
+    <circle key={a} cx={80 + r * Math.cos((a * Math.PI) / 180)} cy={60 + r * Math.sin((a * Math.PI) / 180)} r={f} fill="#f08a24" />
+  ));
+  return (
+    <svg viewBox="0 0 160 120" aria-hidden="true">
+      <rect width="160" height="120" fill={bg} />
+      <circle cx="136" cy="18" r="38" fill="#f2d58a" opacity=".12" />
+      <circle cx="16" cy="104" r="30" fill="#fff" opacity=".07" />
+      {k === 'diwali' && (<>
+        <Burst x={30} y={30} r={16} color="#f2d58a" /><Burst x={132} y={28} r={14} color="#f08a24" />
+        <svg x="40" y="38" width="80" height="56" viewBox="0 0 100 70"><DiyaShapes /></svg>
+      </>)}
+      {k === 'rakhi' && (<>
+        <path d="M8 36Q40 104 64 68M152 36Q120 104 96 68" fill="none" stroke="#f2d58a" strokeWidth="3" />
+        {ring(8, 24, 6)}
+        <circle cx="80" cy="60" r="15" fill="url(#tbGold)" /><circle cx="80" cy="60" r="7" fill="#c0392b" />
+      </>)}
+      {k === 'lohri' && (<>
+        <path d="M80 16c15 17 18 31 0 48-18-17-15-31 0-48z" fill="#f08a24" />
+        <path d="M56 38c10 10 12 20 2 30-12-9-10-19-2-30zM104 38c-10 10-12 20-2 30 12-9 10-19 2-30z" fill="#e4572e" />
+        <path d="M80 36c8 9 9 16 0 24-9-8-8-15 0-24z" fill="#ffe08a" />
+        <rect x="40" y="82" width="80" height="10" rx="5" fill="#5a2a1c" transform="rotate(-8 80 87)" />
+        <rect x="40" y="82" width="80" height="10" rx="5" fill="#7a3a24" transform="rotate(8 80 87)" />
+      </>)}
+      {k === 'karwa' && (<>
+        <circle cx="106" cy="38" r="20" fill="#fff6e5" /><circle cx="114" cy="33" r="18" fill={bg} />
+        <circle cx="62" cy="76" r="26" fill="none" stroke="#f2d58a" strokeWidth="3" />
+        {[[-10, -8], [0, -8], [10, -8], [-10, 2], [0, 2], [10, 2], [-5, 12], [5, 12]].map(([dx, dy], i) => <circle key={i} cx={62 + dx} cy={76 + dy} r="2.2" fill="#f2d58a" />)}
+        <circle cx="30" cy="24" r="2.5" fill="#fff6e5" /><circle cx="140" cy="86" r="2.5" fill="#fff6e5" />
+      </>)}
+      {k === 'wedding' && (<>
+        <circle cx="66" cy="70" r="22" fill="none" stroke="#f2d58a" strokeWidth="6" />
+        <circle cx="96" cy="70" r="22" fill="none" stroke="#d4a24c" strokeWidth="6" />
+        <path d="M90 34l6-9h8l6 9-10 11z" fill="#fff6e5" />
+        <path d={HEART} transform="translate(18 10) scale(1.2)" fill="#ff9fb2" />
+      </>)}
+      {k === 'birthday' && (<>
+        <rect x="42" y="72" width="76" height="32" rx="6" fill="#fff6e5" />
+        <rect x="50" y="50" width="60" height="26" rx="6" fill="#f2d58a" />
+        <path d="M42 78q9.5 8 19 0t19 0 19 0 19 0" fill="none" stroke="#c0392b" strokeWidth="4" />
+        {[62, 80, 98].map((x) => (
+          <g key={x}><rect x={x - 2} y="34" width="4" height="16" fill="#fff6e5" /><path d={`M${x} 22c4 5 4 8 0 11-4-3-4-6 0-11z`} fill="#ffd36b" /></g>
+        ))}
+      </>)}
+      {k === 'anniversary' && (<>
+        <path d={HEART} transform="translate(30 24) scale(3.6)" fill="#ff9fb2" stroke="#f2d58a" strokeWidth=".4" />
+        <path d={HEART} transform="translate(76 40) scale(3.2)" fill="#f2d58a" />
+        <circle cx="30" cy="20" r="3" fill="#fff6e5" /><circle cx="140" cy="100" r="3" fill="#fff6e5" />
+      </>)}
+      {k === 'baby' && (<>
+        <circle cx="72" cy="46" r="24" fill="#fff6e5" /><circle cx="72" cy="46" r="14" fill="#ffd36b" />
+        <rect x="67" y="68" width="9" height="30" rx="4" fill="#fff6e5" transform="rotate(-20 72 68)" />
+        <circle cx="62" cy="104" r="8" fill="none" stroke="#fff6e5" strokeWidth="4" />
+        <path d="M118 30l3 8 8 3-8 3-3 8-3-8-8-3 8-3zM126 82l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#ffd36b" />
+      </>)}
+      {k === 'corporate' && (<>
+        <rect x="42" y="48" width="76" height="52" rx="8" fill="#6e1226" stroke="#d4a24c" strokeWidth="3" />
+        <path d="M66 48v-8a6 6 0 0 1 6-6h16a6 6 0 0 1 6 6v8" fill="none" stroke="#d4a24c" strokeWidth="4" />
+        <path d="M42 72h76" stroke="#d4a24c" strokeWidth="3" /><rect x="74" y="66" width="12" height="11" rx="2" fill="#f2d58a" />
+      </>)}
+      {k === 'christmas' && (<>
+        <path d="M80 14l20 28H88l18 24H92l20 26H48l20-26H54l18-24H60z" fill="#4bb37a" />
+        <rect x="74" y="92" width="12" height="14" fill="#5a2a1c" />
+        <circle cx="80" cy="14" r="5" fill="#f2d58a" />
+        {[[70, 50], [90, 62], [64, 78], [96, 84]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="3.4" fill={i % 2 ? '#f2d58a' : '#c0392b'} />)}
+      </>)}
+      {k === 'newyear' && (<>
+        <Burst x={50} y={44} r={30} color="#f2d58a" /><Burst x={112} y={36} r={26} color="#ff9fb2" /><Burst x={82} y={86} r={22} color="#4bc2c8" />
+        {[[22, 90], [140, 80], [128, 108], [34, 14]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="3" fill="#fff6e5" />)}
+      </>)}
+      {k === 'thanks' && (<>
+        <path d={HEART} transform="translate(38 12) scale(3.5)" fill="#fff6e5" />
+        <text x="80" y="58" textAnchor="middle" fontSize="16" fontStyle="italic" fontWeight="700" fill="#c0392b" fontFamily="Playfair Display, serif">Thank you</text>
+        <rect x="64" y="92" width="32" height="20" rx="3" fill="#8a1c33" stroke="#f2d58a" strokeWidth="2" /><path d="M80 92v20" stroke="#f2d58a" strokeWidth="3" />
+      </>)}
+    </svg>
+  );
+}
+
+function Occasions() {
+  return (
+    <div className="occ-grid">
+      {OCC.map(([k, t, bg], i) => (
+        <Reveal key={k} delay={(i % 4) * 70}>
+          <Link to="/products" className="card occ">
+            <div className="occ-art"><OccasionArt k={k} bg={bg} /></div>
+            <h4>{t}</h4>
+          </Link>
+        </Reveal>
+      ))}
+    </div>
+  );
+}
+
+/* ───────────── large scenes + photo with illustration fallback ───────────── */
+function Scene({ k }) {
+  if (k === 'gifting') {
+    return <div className="scene scene-hamper"><Hamper /></div>;
+  }
+  return (
+    <div className="scene">
+      <svg viewBox="0 0 480 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        {k === 'packing' && (<>
+          <rect width="480" height="340" fill="#fbe9e0" />
+          <circle cx="410" cy="60" r="80" fill="#f2d58a" opacity=".4" />
+          <rect y="262" width="480" height="78" fill="#d4a24c" opacity=".35" />
+          <path d="M116 156h248l-22 118H138z" fill="#8a1c33" stroke="#d4a24c" strokeWidth="4" />
+          <rect x="104" y="140" width="272" height="26" rx="6" fill="#6e1226" stroke="#d4a24c" strokeWidth="4" />
+          <rect x="150" y="66" width="56" height="82" rx="10" fill="#c0392b" /><rect x="150" y="58" width="56" height="16" rx="5" fill="url(#tbGold)" />
+          <rect x="218" y="88" width="52" height="62" rx="6" fill="#f08a24" /><path d="M218 96l7-8 7 8 7-8 7 8 7-8 7 8" stroke="#fff6e5" strokeWidth="3" fill="none" />
+          <rect x="282" y="74" width="50" height="76" rx="12" fill="#fff6e5" stroke="#d4a24c" strokeWidth="3" />
+          <path d="M307 44c7 9 7 16 0 23-7-7-7-14 0-23z" fill="#f08a24" />
+          <path d="M240 166v108" stroke="url(#tbGold)" strokeWidth="14" />
+          <path d="M240 160c-14-30-48-26-40-8s32 14 40 8zM240 160c14-30 48-26 40-8s-32 14-40 8z" fill="none" stroke="#f2d58a" strokeWidth="6" strokeLinejoin="round" />
+          <circle cx="70" cy="290" r="32" fill="none" stroke="#d4a24c" strokeWidth="11" /><circle cx="70" cy="290" r="9" fill="#8a1c33" />
+          <rect x="392" y="236" width="70" height="44" rx="6" fill="#fff6e5" stroke="#a9792a" strokeWidth="2" transform="rotate(-8 427 258)" />
+          <text x="427" y="262" textAnchor="middle" fontSize="12" fontWeight="700" fill="#6e1226" fontFamily="Playfair Display, serif" transform="rotate(-8 427 258)">With love</text>
+          <path d="M60 60l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="#d4a24c" />
+        </>)}
+        {k === 'delivery' && (<>
+          <rect width="480" height="340" fill="#fff6e5" />
+          <circle cx="90" cy="70" r="46" fill="#f2d58a" opacity=".5" />
+          {[[10, 120, 60], [80, 90, 90], [170, 130, 50], [240, 100, 80], [330, 120, 60], [400, 90, 80]].map(([x, y, w], i) => <rect key={i} x={x} y={y} width={w} height={270 - y} fill="#ecd9b8" />)}
+          <rect y="262" width="480" height="78" fill="#4a0a18" /><path d="M0 300h480" stroke="#f2d58a" strokeWidth="4" strokeDasharray="26 20" />
+          <rect x="90" y="166" width="210" height="94" rx="12" fill="#8a1c33" stroke="#d4a24c" strokeWidth="3" />
+          <path d="M300 186h52l34 38v36h-86z" fill="#6e1226" stroke="#d4a24c" strokeWidth="3" />
+          <path d="M312 196h34l22 26h-56z" fill="#c4e6ed" />
+          <rect x="90" y="214" width="210" height="8" fill="url(#tbGold)" />
+          <text x="195" y="248" textAnchor="middle" fontSize="18" fontWeight="700" fill="#f2d58a" fontFamily="Playfair Display, serif">TYOHAAR BOX</text>
+          <circle cx="150" cy="262" r="22" fill="#33060f" /><circle cx="150" cy="262" r="9" fill="#d4a24c" />
+          <circle cx="340" cy="262" r="22" fill="#33060f" /><circle cx="340" cy="262" r="9" fill="#d4a24c" />
+          <path d="M30 190h40M14 210h56M40 230h30" stroke="#d4a24c" strokeWidth="4" strokeLinecap="round" />
+          <path d="M420 40a22 22 0 0 1 22 22c0 18-22 40-22 40s-22-22-22-40a22 22 0 0 1 22-22z" fill="#e4577a" /><circle cx="420" cy="62" r="8" fill="#fff6e5" />
+          <rect x="400" y="236" width="50" height="40" rx="5" fill="#fff6e5" stroke="#d4a24c" strokeWidth="3" /><path d="M425 236v40M400 254h50" stroke="#d4a24c" strokeWidth="5" />
+        </>)}
+        {k === 'festive' && (<>
+          <rect width="480" height="340" fill="#4a0a18" />
+          <circle cx="240" cy="260" r="200" fill="#8a1c33" opacity=".5" />
+          <path d="M0 30Q120 90 240 30T480 30" fill="none" stroke="#d4a24c" strokeWidth="2.5" />
+          {[30, 90, 150, 210, 270, 330, 390, 450].map((x, i) => <circle key={x} cx={x} cy={i % 2 ? 62 : 50} r="7" fill={i % 2 ? '#f08a24' : '#f2d58a'} />)}
+          <Burst x={90} y={130} r={34} color="#f2d58a" /><Burst x={390} y={120} r={30} color="#f08a24" /><Burst x={240} y={110} r={24} color="#ff9fb2" />
+          <svg x="40" y="210" width="130" height="91" viewBox="0 0 100 70"><DiyaShapes /></svg>
+          <svg x="175" y="230" width="130" height="91" viewBox="0 0 100 70"><DiyaShapes /></svg>
+          <svg x="310" y="210" width="130" height="91" viewBox="0 0 100 70"><DiyaShapes /></svg>
+        </>)}
+        {k === 'corporate' && (<>
+          <rect width="480" height="340" fill="#33060f" />
+          <path d="M-20 340L140 0M60 340L220 0M140 340L300 0M220 340L380 0M300 340L460 0" stroke="#d4a24c" strokeWidth="1" opacity=".22" />
+          <rect x="120" y="190" width="240" height="120" rx="8" fill="#6e1226" stroke="#d4a24c" strokeWidth="3" />
+          <rect x="108" y="166" width="264" height="34" rx="7" fill="#8a1c33" stroke="#d4a24c" strokeWidth="3" />
+          <path d="M240 166v144" stroke="url(#tbGold)" strokeWidth="16" />
+          <path d="M240 166c-14-36-54-32-46-10s38 16 46 10zM240 166c14-36 54-32 46-10s-38 16-46 10z" fill="none" stroke="#f2d58a" strokeWidth="6" strokeLinejoin="round" />
+          <rect x="150" y="82" width="150" height="70" rx="6" fill="#8a1c33" stroke="#d4a24c" strokeWidth="3" /><path d="M225 82v70" stroke="url(#tbGold)" strokeWidth="10" />
+          <rect x="316" y="214" width="100" height="62" rx="4" fill="#fff6e5" transform="rotate(7 366 245)" />
+          <path d="M330 232h60M330 246h44M330 260h54" stroke="#6e1226" strokeWidth="4" strokeLinecap="round" transform="rotate(7 366 245)" />
+          <path d="M60 60l5 12 12 5-12 5-5 12-5-12-12-5 12-5zM420 80l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#f2d58a" />
+        </>)}
+      </svg>
+    </div>
+  );
+}
+
+function Photo({ src, scene, alt, badge }) {
+  const [bad, setBad] = useState(false);
+  const show = src && !bad;
+  return (
+    <figure className="photo">
+      {show ? <img src={optimise(src, 1000)} alt={alt} loading="lazy" onError={() => setBad(true)} /> : <Scene k={scene} />}
+      {badge && <figcaption className="photo-badge"><i /> {badge}</figcaption>}
+    </figure>
+  );
+}
+
+// Picture on one side, text on the other
+function Showcase({ photo, scene, badge, eyebrow, title, sub, points, reverse, cta }) {
+  return (
+    <div className={`showcase ${reverse ? 'rev' : ''}`}>
+      <Reveal><Photo src={photo} scene={scene} alt={title} badge={badge} /></Reveal>
+      <Reveal delay={100}>
+        <div className="show-copy">
+          {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+          <h2>{title}</h2>
+          <div className="orn left" aria-hidden="true"><span>✦</span></div>
+          {sub && <p>{sub}</p>}
+          <ul className="ticks">{points.map((x) => <li key={x}>{x}</li>)}</ul>
+          {cta && <div className="cta-row"><Link className="btn primary" to={cta[1]}>{cta[0]}</Link></div>}
+        </div>
+      </Reveal>
+    </div>
+  );
+}
+
+// Small drawings for the three "How it works" steps (drawn for the dark maroon band)
+function StepArt({ k }) {
+  return (
+    <svg viewBox="0 0 120 90" aria-hidden="true">
+      {k === 0 && (<>
+        <rect x="14" y="12" width="64" height="66" rx="8" fill="#fff6e5" stroke="#d4a24c" strokeWidth="3" />
+        <rect x="24" y="22" width="22" height="18" rx="3" fill="#c0392b" /><rect x="52" y="22" width="18" height="18" rx="3" fill="#f08a24" />
+        <path d="M24 52h46M24 62h30" stroke="#8a1c33" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="86" cy="58" r="16" fill="none" stroke="#f2d58a" strokeWidth="5" /><path d="M98 70l14 14" stroke="#f2d58a" strokeWidth="6" strokeLinecap="round" />
+      </>)}
+      {k === 1 && (<>
+        <rect x="14" y="16" width="72" height="56" rx="6" fill="#fff6e5" stroke="#d4a24c" strokeWidth="3" />
+        <path d="M26 34h48M26 46h36M26 58h24" stroke="#8a1c33" strokeWidth="4" strokeLinecap="round" />
+        <path d="M72 78l6-22 28-28 12 12-28 28z" fill="#f2d58a" stroke="#a9792a" strokeWidth="2" /><path d="M72 78l-2 8 8-2z" fill="#8a1c33" />
+        <path d={HEART} transform="translate(60 14) scale(1)" fill="#ff9fb2" />
+      </>)}
+      {k === 2 && (<>
+        <rect x="30" y="38" width="60" height="42" rx="5" fill="#8a1c33" stroke="#d4a24c" strokeWidth="3" />
+        <rect x="24" y="28" width="72" height="16" rx="4" fill="#6e1226" stroke="#d4a24c" strokeWidth="3" />
+        <path d="M60 28v52" stroke="#f2d58a" strokeWidth="7" />
+        <path d="M60 28c-6-16-24-14-20-4s16 8 20 4zM60 28c6-16 24-14 20-4s-16 8-20 4z" fill="none" stroke="#f2d58a" strokeWidth="3.5" />
+        <path d="M14 16l3 7 7 3-7 3-3 7-3-7-7-3 7-3zM100 54l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#f2d58a" />
+      </>)}
+    </svg>
   );
 }
 
@@ -622,9 +882,9 @@ function Header() {
   const solid = scrolled || pathname === '/admin' || open;
   return (
     <header className={`site-header ${solid ? 'solid' : ''}`}>
-    <Link to="/" className="brand" aria-label={SITE.name}>
-      <img className="brand-logo" src={LOGO_URL} alt={SITE.name} />
-    </Link>
+      <Link to="/" className="brand" aria-label={SITE.name}>
+        <img className="brand-logo" src={LOGO_URL} alt={SITE.name} />
+      </Link>
       <button className="burger" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Menu"><span /><span /></button>
       <nav className={open ? 'open' : ''}>
         {NAV.filter(([to]) => to !== '/contact').map(([to, label]) => <NavLink key={to} to={to} end={to === '/'}>{label}</NavLink>)}
@@ -776,7 +1036,12 @@ function Steps() {
   return (
     <div className="grid3">
       {STEPS.map((s, i) => (
-        <Reveal key={s.t} delay={i * 90}><div className="step"><span className="num">{i + 1}</span><h3>{s.t}</h3><p>{s.d}</p></div></Reveal>
+        <Reveal key={s.t} delay={i * 90}>
+          <div className="step">
+            <div className="step-art"><StepArt k={i} /></div>
+            <span className="num">{i + 1}</span><h3>{s.t}</h3><p>{s.d}</p>
+          </div>
+        </Reveal>
       ))}
     </div>
   );
@@ -914,7 +1179,7 @@ function Products() {
 
   return (
     <>
-      <PageHead title="Our Hampers" sub="Premium festive, personal and corporate gifts, handpacked with love." />
+      <PageHead title="Our Hampers" sub="Premium festive, personal and corporate gifts, handpacked with love." bg={PHOTOS.festive} />
       <section className="section">
         <Status loading={loading} error={error} empty={!list.length && <EmptyArt text="Our hampers are being added. Message us on WhatsApp to see the latest collection." />}>
           <div className="toolbar">
@@ -962,6 +1227,7 @@ function Home() {
   return (
     <>
       <section className="hero">
+        <BgPhoto url={PHOTOS.hero} />
         <div className="bokeh" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
         <div className="hero-mandala" aria-hidden="true"><BigMandala /></div>
         <div className="garland top" aria-hidden="true" />
@@ -998,10 +1264,46 @@ function Home() {
         <Collections />
       </section>
 
+      <Full tone="cream">
+        <section className="section">
+          <SecIntro eyebrow="Shop by occasion" title="Find the right gift for the moment" sub="From festivals to milestones, pick the occasion and we will suggest the hamper." />
+          <Occasions />
+        </section>
+      </Full>
+
       <Full tone="blush">
         <section className="section">
           <SecIntro eyebrow="Inside the box" title="Ideas for what goes inside" sub="Every hamper is different. Tell us what your loved ones enjoy and we will pack it that way." />
           <Items />
+        </section>
+      </Full>
+
+      <section className="section">
+        <Showcase
+          photo={PHOTOS.packing}
+          scene="packing"
+          badge="Handpacked, one hamper at a time"
+          eyebrow="Made with care"
+          title="Every hamper is packed by hand"
+          sub="Treats, extras and a personal touch are arranged beautifully, so the moment it is opened feels special."
+          points={['Premium snacks, sweets and gourmet jars', 'Ribbons, wrapping and a message card', 'Customised to your budget and occasion']}
+          cta={['Browse hampers', '/products']}
+        />
+      </section>
+
+      <Full tone="cream">
+        <section className="section">
+          <Showcase
+            photo={PHOTOS.corporate}
+            scene="corporate"
+            badge="Bulk and corporate orders welcome"
+            eyebrow="Corporate gifting"
+            title="Thoughtful gifts for clients and teams"
+            sub="Festive and corporate hampers with tasteful packaging, made in the quantity you need."
+            points={['Custom branding and message cards', 'Bulk quantities at a quoted price', 'Delivery arranged for you']}
+            cta={['Get a quote', '/contact']}
+            reverse
+          />
         </section>
       </Full>
 
@@ -1048,16 +1350,16 @@ function Home() {
 /* ───────────── about ───────────── */
 function About() {
   const values = [
-    ['Thoughtful', 'Every hamper is chosen to feel personal, not generic.'],
-    ['Premium', 'Quality treats, tasteful packaging and a beautiful presentation.'],
-    ['Handpacked', 'Arranged by hand with care, one hamper at a time.'],
-    ['Flexible', 'Festive, personal or corporate. We customise to your budget and occasion.'],
-    ['Reliable', 'Clear communication on WhatsApp from order to delivery.'],
-    ['Joyful', 'Our promise is simple: celebrate, gift and spread happiness.'],
+    ['Thoughtful', 'Every hamper is chosen to feel personal, not generic.', 'heart'],
+    ['Premium', 'Quality treats, tasteful packaging and a beautiful presentation.', 'star'],
+    ['Handpacked', 'Arranged by hand with care, one hamper at a time.', 'gift'],
+    ['Flexible', 'Festive, personal or corporate. We customise to your budget and occasion.', 'sparkle'],
+    ['Reliable', 'Clear communication on WhatsApp from order to delivery.', 'chat'],
+    ['Joyful', 'Our promise is simple: celebrate, gift and spread happiness.', 'heart'],
   ];
   return (
     <>
-      <PageHead title="Celebrate. Gift. Spread Happiness." sub="Tyohaar Box curates premium hampers for the moments that matter." />
+      <PageHead title="Celebrate. Gift. Spread Happiness." sub="Tyohaar Box curates premium hampers for the moments that matter." bg={PHOTOS.festive} />
       <section className="section">
         <div className="story">
           <Reveal>
@@ -1075,6 +1377,22 @@ function About() {
         </div>
       </section>
 
+      <Full tone="blush">
+        <section className="section">
+          <Showcase
+            photo={PHOTOS.delivery}
+            scene="delivery"
+            badge="Delivery available"
+            eyebrow="From our box to their door"
+            title="We stay with you until it arrives"
+            sub="Share the address and we confirm the delivery details on WhatsApp, so your gift reaches your loved ones on time."
+            points={['Updates on WhatsApp from order to doorstep', 'Safe, careful packing for travel', 'Gifts sent to friends and family across cities']}
+            cta={['Message us', '/contact']}
+            reverse
+          />
+        </section>
+      </Full>
+
       <Full tone="cream">
         <section className="section">
           <SecIntro eyebrow="What we offer" title="Gifting for every occasion" />
@@ -1091,8 +1409,8 @@ function About() {
         <section className="section">
           <SecIntro eyebrow="Our values" title="What we stand for" />
           <div className="grid3">
-            {values.map(([t, d], i) => (
-              <Reveal key={t} delay={(i % 3) * 90}><article className="card"><h3>{t}</h3><p>{d}</p></article></Reveal>
+            {values.map(([t, d, ic], i) => (
+              <Reveal key={t} delay={(i % 3) * 90}><article className="card"><span className="ic" style={{ marginBottom: 14 }}><Icon k={ic} /></span><h3>{t}</h3><p>{d}</p></article></Reveal>
             ))}
           </div>
         </section>
@@ -1146,7 +1464,7 @@ function Reviews() {
 
   return (
     <>
-      <PageHead title="Customer Reviews" sub={avg ? `${avg} out of 5 from ${list.length} review${list.length > 1 ? 's' : ''}` : 'Be the first to share your experience.'} />
+      <PageHead title="Customer Reviews" sub={avg ? `${avg} out of 5 from ${list.length} review${list.length > 1 ? 's' : ''}` : 'Be the first to share your experience.'} bg={PHOTOS.gifting} />
       <section className="section narrow">
         <div className="toolbar">
           <h2>All reviews</h2>
@@ -1208,7 +1526,7 @@ function Contact() {
 
   return (
     <>
-      <PageHead title="Let’s plan your gift" sub="Tell us the occasion and your budget. We will take care of the rest." />
+      <PageHead title="Let’s plan your gift" sub="Tell us the occasion and your budget. We will take care of the rest." bg={PHOTOS.delivery} />
       <section className="section split">
         <div className="info">
           {SITE.phones.map((p) => (
@@ -1219,7 +1537,7 @@ function Contact() {
           <div className="card info-card"><span>Good to know</span>
             <ul className="ticks small-list" style={{ marginTop: 8 }}><li>Premium hampers for every occasion</li><li>Festive, personal and corporate gifting</li><li>Delivery available</li></ul>
           </div>
-          <div className="art-card"><HamperFramed /></div>
+          <Photo src={PHOTOS.gifting} scene="gifting" alt="A Tyohaar Box gift hamper" badge="Handpacked with love" />
         </div>
         <form className="card form" onSubmit={submit}>
           <h3>Send us a message</h3>
