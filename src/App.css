@@ -482,3 +482,7 @@ main { display: block; min-height: 60vh; }
   .showcase > :first-child::before { inset: 10px -6px -10px 6px; }
   .showcase.rev > :first-child::before { inset: 10px 6px -10px -6px; }
 }
+
+.brand-logo { height: 76px; width: auto; display: block; transition: height .35s var(--ease); }
+.site-header.solid .brand-logo { height: 58px; }
+@media (max-width: 640px) { .brand-logo { height: 54px; } .site-header.solid .brand-logo { height: 46px; } }
