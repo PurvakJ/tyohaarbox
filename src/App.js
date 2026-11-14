@@ -14,6 +14,9 @@ const API_URL = process.env.REACT_APP_API_URL || 'https://script.google.com/macr
 // Paste your logo image link here (Cloudinary URL, or a file in /public like '/logo.png')
 const LOGO_URL = 'https://res.cloudinary.com/dm9gg8yss/image/upload/v1794127182/image/f02cc1b8-c048-47bf-91f3-932a77b787da_noufnx.png';
 
+// Intro loader: how long it stays fully visible before fading out (ms). Keep between 2000 and 3000.
+const LOADER_MS = 2600;
+
 const SITE = {
   name: 'Tyohaar Box',
   tagline: 'Curated Gifts. Timeless Memories.',
@@ -550,6 +553,53 @@ function useLoaded(url) {
 function BgPhoto({ url }) {
   const ok = useLoaded(url);
   return ok ? <div className="bg-photo" style={{ backgroundImage: `url(${optimise(url, 1800)})` }} aria-hidden="true" /> : null;
+}
+
+/* ───────────── intro loader (festive: spinning mandala, swinging lanterns, flickering diyas) ───────────── */
+function Loader() {
+  const [phase, setPhase] = useState('show'); // show -> out (fade) -> gone (removed)
+  const [logoBad, setLogoBad] = useState(false);
+  const logoOk = useLoaded(LOGO_URL);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden'; // no scrolling behind the loader
+    const fade = setTimeout(() => setPhase('out'), LOADER_MS);
+    const done = setTimeout(() => { setPhase('gone'); document.body.style.overflow = prev; }, LOADER_MS + 650);
+    return () => { clearTimeout(fade); clearTimeout(done); document.body.style.overflow = prev; };
+  }, []);
+
+  if (phase === 'gone') return null;
+  const showLogo = LOGO_URL && logoOk && !logoBad;
+
+  return (
+    <div className={`loader ${phase === 'out' ? 'out' : ''}`} role="status" aria-live="polite" aria-label="Loading Tyohaar Box">
+      <div className="bokeh" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
+      <div className="loader-mandala" aria-hidden="true"><BigMandala /></div>
+      <div className="garland loader-garland" aria-hidden="true" />
+      <Lantern className="l1 ll" color="#f08a24" />
+      <Lantern className="l2 ll" color="#c0392b" />
+      <Lantern className="l3 ll" color="#f08a24" />
+      <Lantern className="l4 ll" color="#8a1c33" />
+      <Diya className="loader-diya left" />
+      <Diya className="loader-diya right" />
+
+      <div className="loader-core">
+        <div className="loader-ring">
+          <div className={`loader-disc ${showLogo ? '' : 'dark'}`}>
+            {showLogo
+              ? <img src={optimise(LOGO_URL, 400)} alt="" onError={() => setLogoBad(true)} />
+              : <Hamper />}
+          </div>
+        </div>
+        <h2 className="loader-name">TYOHAAR BOX</h2>
+        <p className="loader-tag">{SITE.tagline}</p>
+        <p className="loader-sub">Wrapping your festive hampers with love…</p>
+        <div className="loader-bar" aria-hidden="true"><i /></div>
+        <p className="loader-wish">{SITE.sub}</p>
+      </div>
+    </div>
+  );
 }
 
 /* ───────────── occasion illustrations ───────────── */
@@ -1880,6 +1930,7 @@ export default function App() {
     <HashRouter>
       <style>{EXTRA_CSS}</style>
       <Defs />
+      <Loader />
       <ScrollTop />
       <HotKey />
       <Header />

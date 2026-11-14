@@ -430,9 +430,10 @@ main { display: block; min-height: 60vh; }
   .reveal { opacity: 1; transform: none; }
 }
 
-.brand-logo { height: 52px; width: auto; display: block; transition: height .35s var(--ease); }
-.site-header.solid .brand-logo { height: 44px; }
-@media (max-width: 640px) { .brand-logo { height: 42px; } .site-header.solid .brand-logo { height: 38px; } }
+/* logo (enlarged) */
+.brand-logo { height: 76px; width: auto; display: block; transition: height .35s var(--ease); }
+.site-header.solid .brand-logo { height: 58px; }
+@media (max-width: 640px) { .brand-logo { height: 54px; } .site-header.solid .brand-logo { height: 46px; } }
 
 /* ───────────── photos, scenes, occasions, step art ───────────── */
 .bg-photo { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center; opacity: .28; pointer-events: none; animation: fadeOnly 1.2s both; }
@@ -483,6 +484,67 @@ main { display: block; min-height: 60vh; }
   .showcase.rev > :first-child::before { inset: 10px 6px -10px -6px; }
 }
 
-.brand-logo { height: 76px; width: auto; display: block; transition: height .35s var(--ease); }
-.site-header.solid .brand-logo { height: 58px; }
-@media (max-width: 640px) { .brand-logo { height: 54px; } .site-header.solid .brand-logo { height: 46px; } }
+/* ───────────── intro loader screen (shows about 2.6s, then fades out) ───────────── */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #f6dfe3;
+  background: radial-gradient(circle at 50% 42%, var(--wine) 0%, var(--maroon-dark) 52%, var(--maroon-deep) 100%);
+  transition: opacity .6s var(--ease), visibility .6s var(--ease), transform .6s var(--ease);
+}
+.loader.out { opacity: 0; visibility: hidden; transform: scale(1.04); pointer-events: none; }
+.loader::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(242, 213, 138, .22) 1.5px, transparent 1.6px); background-size: 34px 34px; mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%); }
+.loader .bokeh i { opacity: .5; }
+
+.loader-mandala { position: absolute; left: 50%; top: 50%; width: min(860px, 120vw); aspect-ratio: 1; transform: translate(-50%, -50%); opacity: .16; pointer-events: none; }
+.loader-mandala svg { width: 100%; height: 100%; animation: tbspin 18s linear infinite; }
+
+.loader .lantern.ll { top: -6px; }
+.loader .lantern.l1.ll { left: 6%; width: 44px; }
+.loader .lantern.l3.ll { right: 6%; width: 58px; }
+.loader .lantern.l4.ll { right: 20%; width: 38px; }
+.loader .lantern.l2.ll { left: 22%; width: 38px; }
+
+.loader-garland { position: absolute; left: 0; right: 0; top: 0; z-index: 3; }
+
+.loader-core { position: relative; z-index: 4; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 24px; }
+
+.loader-ring { position: relative; width: clamp(190px, 44vw, 250px); aspect-ratio: 1; display: grid; place-items: center; animation: ldrPop .9s var(--ease) both; }
+.loader-ring::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px dashed rgba(242, 213, 138, .65); animation: tbspin 14s linear infinite reverse; }
+.loader-ring::after { content: ''; position: absolute; inset: 14px; border-radius: 50%; border: 3px solid transparent; border-top-color: var(--gold-light); border-right-color: var(--gold); animation: tbspin 1.6s linear infinite; }
+.loader-disc { position: relative; width: 78%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 50% 38%, #fff, var(--cream)); border: 3px solid var(--gold); box-shadow: 0 0 0 8px rgba(242, 213, 138, .12), 0 0 46px rgba(242, 213, 138, .4), 0 18px 40px rgba(0, 0, 0, .4); animation: ldrBeat 1.6s ease-in-out infinite; }
+.loader-disc img { width: 82%; height: 82%; object-fit: contain; }
+.loader-disc svg { width: 86%; height: auto; }
+.loader-disc.dark { background: radial-gradient(circle at 30% 20%, var(--wine), var(--maroon-deep)); }
+
+.loader-name { margin: 26px 0 0; font-family: var(--ff-head); font-weight: 700; font-size: clamp(1.6rem, 5vw, 2.3rem); letter-spacing: .16em; background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; animation: ldrUp .8s .35s var(--ease) both; }
+.loader-tag { margin: 6px 0 0; font-family: var(--ff-fun); font-size: 1.02rem; letter-spacing: .06em; color: var(--gold-light); animation: ldrUp .8s .55s var(--ease) both; }
+.loader-sub { margin: 4px 0 0; font-size: .85rem; color: #e9c4cb; animation: ldrUp .8s .7s var(--ease) both; }
+
+.loader-bar { position: relative; width: min(260px, 66vw); height: 6px; margin-top: 28px; border-radius: 6px; background: rgba(242, 213, 138, .22); overflow: hidden; animation: ldrUp .8s .8s var(--ease) both; }
+.loader-bar i { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 6px; background: var(--gold-grad); box-shadow: 0 0 12px rgba(242, 213, 138, .8); animation: ldrFill 2.3s .3s cubic-bezier(.45, .05, .35, 1) forwards; }
+.loader-wish { margin: 12px 0 0; font-family: var(--ff-fun); font-size: .9rem; letter-spacing: .08em; color: var(--gold); animation: ldrUp .8s .9s var(--ease) both; }
+
+.loader .loader-diya { position: absolute; bottom: 7%; width: clamp(64px, 11vw, 100px); z-index: 4; }
+.loader .loader-diya.left { left: clamp(18px, 10vw, 150px); }
+.loader .loader-diya.right { right: clamp(18px, 10vw, 150px); }
+
+@keyframes ldrFill { 0% { width: 0; } 100% { width: 100%; } }
+@keyframes ldrUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes ldrPop { from { opacity: 0; transform: scale(.6) rotate(-12deg); } to { opacity: 1; transform: none; } }
+@keyframes ldrBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.045); } }
+
+@media (max-width: 640px) {
+  .loader .lantern.l2.ll, .loader .lantern.l4.ll { display: none; }
+  .loader .lantern.l1.ll { width: 32px; left: 4%; }
+  .loader .lantern.l3.ll { width: 40px; right: 4%; }
+  .loader .loader-diya { bottom: 5%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader *, .loader *::before, .loader *::after { animation: none !important; }
+  .loader-bar i { width: 100%; }
+}
